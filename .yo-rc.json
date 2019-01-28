@@ -1,0 +1,23 @@
+{
+  "generator-ngx-rocket": {
+    "version": "5.3.0",
+    "props": {
+      "location": "path",
+      "appName": "skyscannerApp",
+      "target": [
+        "web"
+      ],
+      "pwa": true,
+      "ui": "bootstrap",
+      "auth": true,
+      "lazy": true,
+      "angulartics": true,
+      "analyticsProvider": "ga",
+      "googleAnalyticsAccount": "",
+      "prettier": true,
+      "projectName": "skyscanner-app",
+      "packageManager": "npm",
+      "mobile": []
+    }
+  }
+}
