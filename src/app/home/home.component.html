@@ -9,100 +9,41 @@
       </label>
     </div>
 
-    <!-- TODO Create a separate component -->
     <!-- From / To Form -->
     <form>
       <div class="form-row">
-        <div class="form-group col-md-6 input-dropdown">
-          <label for="originplace">From</label>
-          <input
-            type="text"
-            class="form-control form-control-lg"
-            id="originplace" placeholder="From"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-            autocomplete="off"
-            [ngModel]="searchOriginPlaceQuery"
-            name="originplace"
-          >
-          <div class="dropdown-menu w-100 dropdown-menu-custom" aria-labelledby="originplace">
-            <app-loader [isLoading]="isLoadingOriginPlace"></app-loader>
-            <span *ngFor="let item of originPlaceList">
-              <a class="dropdown-item" (click)="selectOriginPlace(item)">
-                <span class="d-flex flex-column">
-                  <h4 class="text-uppercase text-bold">{{item.PlaceId}}</h4>
-                  <h5>{{item.PlaceName}}, {{item.RegionId}}</h5>
-                  <h6>{{item.CountryName}}</h6>
-                </span>
-              </a>
-            </span>
-          </div>
+        <div class="col-md-6">
+          <app-skyscanner-search-place
+            [label]="'From'"
+            (searchPlaceQueryEvent)="handleOriginPlaceQuery($event)"
+          ></app-skyscanner-search-place>
         </div>
-        <div class="form-group col-md-6 dropdown">
-          <label for="destinationplace">To</label>
-          <input
-            type="text"
-            class="form-control form-control-lg dropdown-toggle"
-            id="destinationplace"
-            placeholder="To"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-            autocomplete="off"
-            [ngModel]="searchDestinationPlaceQuery"
-            name="destinationplace"
-          >
-          <div class="dropdown-menu w-100 dropdown-menu-custom" aria-labelledby="destinationplace">
-            <app-loader [isLoading]="isLoadingDestinationPlace"></app-loader>
-            <span *ngFor="let item of destinationPlaceList">
-              <a class="dropdown-item" (click)="selectDestinationPlace(item)">
-                <span class="d-flex flex-column">
-                  <h4 class="text-uppercase text-bold">{{item.PlaceId}}</h4>
-                  <h5>{{item.PlaceName}}, {{item.RegionId}}</h5>
-                  <h6>{{item.CountryName}}</h6>
-                </span>
-              </a>
-            </span>
-          </div>
+        <div class="col-md-6">
+          <app-skyscanner-search-place
+            [label]="'To'"
+            (searchPlaceQueryEvent)="handleDestinationPlaceQuery($event)"
+          ></app-skyscanner-search-place>
         </div>
       </div>
     </form>
     <!-- #/From / To Form -->
 
-    <!-- TODO Create a separate component -->
     <!-- Departure / Return Date Form -->
     <form>
       <div class="form-row">
-        <div class="form-group col-md-6 input-dropdown">
-          <label for="departure-date">Departure</label>
-          <input
-            type="text"
-            class="form-control form-control-lg"
-            id="departure-date"
-            placeholder="yyyy-mm-dd"
-            autocomplete="off"
-            [(ngModel)]="departureDateQuery"
-            name="departure-date"
-          >
-          <small class="form-text text-muted">
-            <pre>Format “yyyy-mm-dd”, “yyyy-mm” or “anytime”</pre>
-          </small>
+        <div class="col-md-6">
+          <app-skyscanner-date-input
+            [label]="'Departure'"
+            [date]="departureDateQuery"
+            (dateEvent)="handleDepartureDate($event)"
+          ></app-skyscanner-date-input>
         </div>
-        <div class="form-group col-md-6 dropdown" *ngIf="isToggleActive">
-          <label for="return-date">Return</label>
-          <input
-            type="text"
-            class="form-control form-control-lg dropdown-toggle"
-            id="return-date"
-            placeholder="yyyy-mm-dd"
-            autocomplete="off"
-            [(ngModel)]="returnDateQuery"
-            name="return-date"
-          >
-          <small class="form-text text-muted">
-            <pre>Format “yyyy-mm-dd”, “yyyy-mm” or “anytime”</pre>
-          </small>
+        <div class="col-md-6">
+          <app-skyscanner-date-input
+            [label]="'Return'"
+            [date]="returnDateQuery"
+            (dateEvent)="handleReturnDate($event)"
+          ></app-skyscanner-date-input>
         </div>
       </div>
     </form>
@@ -112,25 +53,15 @@
   </div>
 </div>
 
-<!-- TODO Create a separate component -->
-<!-- Result List -->
-<div *ngIf="quotesList.Quotes.length > 0">
-  <div class="card mb-5" *ngFor="let item of quotesList.Quotes">
-    <div class="card-body">
-      <h3 class="card-title">{{item.MinPrice | currency:'USD'}}</h3>
-      <div class="d-flex flex-column">
-        <div *ngIf="item.OutboundLeg" id="outbound">
-          <h4 class="card-subtitle mb-2 text-muted">{{getPlace(item.OutboundLeg.OriginId)}} > {{getPlace(item.OutboundLeg.DestinationId)}}</h4>
-          <h4>{{item.OutboundLeg.DepartureDate | date:'MM-dd-yyyy'}}</h4>
-          <h5 *ngFor="let carrierId of item.OutboundLeg.CarrierIds">{{getCarrier(carrierId)}}</h5>
-        </div>
-        <div *ngIf="item.InboundLeg" id="inbound">
-          <h4 class="card-subtitle mb-2 text-muted">{{getPlace(item.InboundLeg.OriginId)}} > {{getPlace(item.InboundLeg.DestinationId)}}</h4>
-          <h4>{{item.InboundLeg.DepartureDate}}</h4>
-          <h5 *ngFor="let carrierId of item.InboundLeg.CarrierIds">{{getCarrier(carrierId)}}</h5>
-        </div>
-      </div>
-    </div>
-  </div>
+<!-- Flight List -->
+<div id="flight-list">
+  <app-loader
+    [isLoading]="isSearchingFlights"
+    [message]="'Searching Flights...'"
+    [faSize]="'fa-3x'"
+  ></app-loader>
+  <app-skyscanner-flights-list
+    [quotesList]="quotesList"
+  ></app-skyscanner-flights-list>
 </div>
-<!-- #/Result List -->
+<!-- #/Flight List -->

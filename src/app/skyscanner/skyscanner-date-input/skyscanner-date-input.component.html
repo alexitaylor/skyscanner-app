@@ -1,0 +1,16 @@
+<div class="form-group input-dropdown">
+  <label [for]="label + '-date'">{{label}}</label>
+  <input
+    type="text"
+    class="form-control form-control-lg"
+    [id]="label + '-date'"
+    placeholder="yyyy-mm-dd"
+    autocomplete="off"
+    [(ngModel)]="date"
+    (change)="handleDate()"
+    [name]="label + '-date'"
+  >
+  <small class="form-text text-muted">
+    <pre>Format “yyyy-mm-dd”, “yyyy-mm” or “anytime”</pre>
+  </small>
+</div>

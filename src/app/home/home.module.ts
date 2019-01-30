@@ -11,6 +11,7 @@ import { HomeComponent } from './home.component';
 import { QuoteService } from './quote.service';
 import { FormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
+import { SkyscannerModule } from '@app/skyscanner/skyscanner.module';
 
 @NgModule({
   imports: [
@@ -24,7 +25,9 @@ import { ToastrModule } from 'ngx-toastr';
     BrowserAnimationsModule,
     ToastrModule.forRoot({
       positionClass: 'toast-bottom-right',
-    })],
+    }),
+    SkyscannerModule,
+  ],
   declarations: [HomeComponent],
   providers: [QuoteService]
 })

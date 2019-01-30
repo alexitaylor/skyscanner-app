@@ -1,0 +1,31 @@
+<div class="form-group input-dropdown">
+  <label [for]="'place-' + label">{{label}}</label>
+  <input
+    type="text"
+    class="form-control form-control-lg"
+    [id]="'place-' + label"
+    [placeholder]="label"
+    data-toggle="dropdown"
+    aria-haspopup="true"
+    aria-expanded="false"
+    autocomplete="off"
+    [ngModel]="searchPlaceQuery"
+    name="place"
+  >
+  <div class="dropdown-menu w-100 dropdown-menu-custom" aria-labelledby="place">
+    <app-loader
+      [isLoading]="isLoadingPlace"
+      [message]="'Loading Airports...'"
+      [faSize]="'fa-2x'"
+    ></app-loader>
+    <span *ngFor="let item of placeList">
+      <a class="dropdown-item" (click)="selectPlace(item)">
+        <span class="d-flex flex-column">
+          <h4 class="text-uppercase text-bold">{{item.PlaceId}}</h4>
+          <h5>{{item.PlaceName}}, {{item.RegionId}}</h5>
+          <h6>{{item.CountryName}}</h6>
+        </span>
+      </a>
+    </span>
+  </div>
+</div>

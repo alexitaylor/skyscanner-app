@@ -1,0 +1,19 @@
+<div *ngIf="quotesList.Quotes.length > 0">
+  <div class="card mb-5" *ngFor="let item of quotesList.Quotes">
+    <div class="card-body">
+      <h3 class="card-title">{{item.MinPrice | currency:'USD'}}</h3>
+      <div class="d-flex flex-column">
+        <div *ngIf="item.OutboundLeg" id="outbound">
+          <h4 class="card-subtitle mb-2 text-muted">{{getPlace(item.OutboundLeg.OriginId)}} > {{getPlace(item.OutboundLeg.DestinationId)}}</h4>
+          <h4>{{item.OutboundLeg.DepartureDate | date:'MM-dd-yyyy'}}</h4>
+          <h5 *ngFor="let carrierId of item.OutboundLeg.CarrierIds">{{getCarrier(carrierId)}}</h5>
+        </div>
+        <div *ngIf="item.InboundLeg" id="inbound">
+          <h4 class="card-subtitle mb-2 text-muted">{{getPlace(item.InboundLeg.OriginId)}} > {{getPlace(item.InboundLeg.DestinationId)}}</h4>
+          <h4>{{item.InboundLeg.DepartureDate}}</h4>
+          <h5 *ngFor="let carrierId of item.InboundLeg.CarrierIds">{{getCarrier(carrierId)}}</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
